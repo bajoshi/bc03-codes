@@ -28,7 +28,7 @@ def read_current_filepos(filehandle, type='i', number=1):
 
     return np.asarray(arr)
 
-def read_ised(modelfile):
+def read_ised(modelfile, del_modelfile):
     
     fh = open(modelfile, 'rb')
     
