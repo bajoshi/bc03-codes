@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
         # get just the file name
         fl_name = os.path.basename(fl)
-        print fl_name
+        print "Working on", fl_name
 
         # open file and save all data to npy arrays
         # for each fits file there will be three numpy arrays
@@ -47,5 +47,8 @@ if __name__ == '__main__':
             npy_spectra_to_save[i] = hdulist[i+3].data
 
         np.save(fl.replace('.fits', '_allspectra.npy'), npy_spectra_to_save)
+
+        # close fits file
+        hdulist.close()
 
     sys.exit(0)
