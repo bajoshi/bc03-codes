@@ -18,8 +18,9 @@ if __name__ == '__main__':
     # define directories
     models_dir = home + '/Documents/GALAXEV_BC03/bc03/src/cspout_new/'
     metallicity = 'm62/'
+    single_csp_set_dir = home + '/Documents/GALAXEV_BC03/'
 
-    for fl in glob.glob(models_dir + metallicity + '*.fits'):
+    for fl in glob.glob(single_csp_set_dir + '*.fits'):
 
         # get just the file name
         fl_name = os.path.basename(fl)
