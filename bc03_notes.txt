@@ -1,0 +1,70 @@
+### BC03 Installation and Working Notes ###
+
+--------------------------------------------------------------------------
+FOR THE NEWER 2016 UPDATED VERSION
+
+1. Download the required files from http://www.bruzual.org/
+There is a link for the updated GALAXEV 2016 version. There is also a link to 
+the other directories you will need. I downloaded the MILES models (all IMFs) 
+along with the source code (in the src/ folder).
+
+2. You will have to work with this software using csh.
+
+3. For the newer version, I did not have to modify the Makefile at all.
+It seems like they've made the required changes (among other things).
+Simply put in the $bc03 variable in my .cshrc.
+
+4. Switch to csh and source .cshrc if needed.
+
+5. Now you only need to do the 3 steps mentioned in the manual.
+>> cd $bc03
+>> source ./.bc_cshrc
+>> make all
+
+6. To run csp_galaxev do
+>> ./csp_galaxev
+
+7. You will need to have the required SSP ised files in the src/ folder though.
+Gunzip the ised files from the MILES folders and transfer them to the src/ 
+folder. Now you can work with csp_galaxev.
+
+This version of GALAXEV gives many more output files than the older version.
+The manual doesn't seem to say much about them so you need to find out by 
+looking in the files.
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+NOTES FOR THE OLDER 2003 VERSION
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+1. When you download the main file from their website it comes with the four subdirectories:
+/doc /models /src /templates
+
+2. To actually use the entire functionality of BC03 models you need to compile their code first
+
+3. The bc03.ps file which is the manual to using the models is very helpful.
+3a. It will ask you to change the makefile according to your needs.
+3b. cd $bc03
+This variable has to be defined first in your .cshrc. See manual.
+It needs to point to the src/ directory.
+
+--> You are now in the ./bc03/src directory
+Now change the Makefile.
+I did the following...
+-- changed fortran compiler from g77 to fortran
+-- changed the end of that same line 
+-- it now reads -ffixed-line-length-none instead of -ffixed-line-length-132
+
+This change was done because gfortran by default reads only the first 132 characters in a line of code and the rest is not read which makes the code meaningless. This change gets it to read the entire line.
+
+3c. make all in terminal. This will create executable files of their code.
+
+4. Now you can use their fortran programs to get SEDs from their models and do other stuff.
+
+5. Final comment: to run any code you will need a ./ at the beginning. Example: ./bin_ised will convert the ascii file to a .ised file which their galaxevpl program can read.
+5a. The alias gpl for galaxevpl will not work because it does not have the ./
+Use ./galaxevpl instead of gpl.
+
+When running csp_galaxev, if it gives an error by saying enter correct filter file or something like that
+then you need to source .bc_cshrc again. You will have to source .bc_cshrc everytime this happens.
+.bc_cshrc lives in $HOME/Documents/GALAXEV_BC03/bc03/src/
