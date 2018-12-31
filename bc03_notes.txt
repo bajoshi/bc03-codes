@@ -21,16 +21,27 @@ Simply put in the $bc03 variable in my .cshrc.
 >> source ./.bc_cshrc
 >> make all
 
+When you do >>source ./.bc_cshrc there will be an error when it does
+not find the $bc97 variable since we never defined this. I found that 
+everything still works perfectly if this line is commented out.
+
 6. To run csp_galaxev do
 >> ./csp_galaxev
 
 7. You will need to have the required SSP ised files in the src/ folder though.
 Gunzip the ised files from the MILES folders and transfer them to the src/ 
 folder. Now you can work with csp_galaxev.
+You do not have to make the ised files executable like the older version.
 
 This version of GALAXEV gives many more output files than the older version.
 The manual doesn't seem to say much about them so you need to find out by 
 looking in the files.
+
+When running csp_galaxev, if it gives an error by saying enter correct filter 
+file or something like that then you need to source .bc_cshrc again. Or if you 
+run your python code and nothing happens. 
+You will have to source .bc_cshrc everytime this happens.
+.bc_cshrc lives in the src/ folder.
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
@@ -64,7 +75,3 @@ This change was done because gfortran by default reads only the first 132 charac
 5. Final comment: to run any code you will need a ./ at the beginning. Example: ./bin_ised will convert the ascii file to a .ised file which their galaxevpl program can read.
 5a. The alias gpl for galaxevpl will not work because it does not have the ./
 Use ./galaxevpl instead of gpl.
-
-When running csp_galaxev, if it gives an error by saying enter correct filter file or something like that
-then you need to source .bc_cshrc again. You will have to source .bc_cshrc everytime this happens.
-.bc_cshrc lives in $HOME/Documents/GALAXEV_BC03/bc03/src/
