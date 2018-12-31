@@ -1,0 +1,6 @@
+### Steps to get to the set of models to be used with the SED fitting code ###
+
+0. Make sure GALAXEV-BC03 is installed correctly and working.
+Read in the notes in bc03_notes.txt
+
+1. 

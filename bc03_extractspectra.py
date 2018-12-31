@@ -9,12 +9,24 @@ from __future__ import division
 
 import numpy as np
 import array
-from astropy.io import fits as pf
+from astropy.io import fits
 
 import glob 
 import os 
 import sys
 
+home = os.getenv('HOME')
+
+src = home + "/Documents/galaxev_bc03_2016update/bc03/src/"
+cspout = "/Volumes/Bhavins_backup/bc03_models_npy_spectra/cspout_2016updated_galaxev/"
+# This is if working on the laptop. 
+# Then you must be using the external hard drive where the models are saved.
+if not os.path.isdir(cspout):
+    # On firstlight
+    cspout = home + '/Documents/galaxev_bc03_2016update/bc03/src/cspout_2016updated_galaxev/'
+    if not os.path.isdir(cspout):
+        print "Model directory not found. Exiting..."
+        sys.exit(0)
 
 def read_current_filepos(filehandle, type='i', number=1):
     """
@@ -28,7 +40,7 @@ def read_current_filepos(filehandle, type='i', number=1):
 
     return np.asarray(arr)
 
-def read_ised(modelfile, del_modelfile):
+def read_ised(modelfile, del_modelfile=False):
     
     fh = open(modelfile, 'rb')
     
@@ -56,23 +68,30 @@ def read_ised(modelfile, del_modelfile):
     
     allages = read_current_filepos(fh, type='f', number=totalages) # in years
     
-    fh.seek(328, 1) # done by trial and error and looking at the ezgal code but mostly the ezgal code helped
-    # this goes 328 bytes forward from the current position
-    # if the second keyword is not provided then it assumes absolute positioning
+    fh.seek(328, 1)
+    """
+    Done by trial and error and looking at the ezgal code but mostly the ezgal code helped/
+    This goes 328 bytes forward from the current position.
+    If the second keyword is not provided then it assumes absolute positioning.
+    I think (although I couldn't see all the characters properly) that these 328 
+    bytes simply contain their copyright string (or something like that).
+    Couldn't quite tell properly because they won't show up properly (some unicode issue).
+    """
 
     totalwavelengths = read_current_filepos(fh)[0]
     allwavelengths = read_current_filepos(fh, type='f', number=totalwavelengths)
     
     seds = np.zeros((totalages, totalwavelengths))
     
-    hdu = pf.PrimaryHDU()
+    hdu = fits.PrimaryHDU()
     
-    tau = int(modelfile.split('/')[-1].split('_')[5][3:])
-    tauV = int(modelfile.split('/')[-1].split('_')[3][4:])
+    # These two parameters aren't used for now
+    #tau = int(modelfile.split('/')[-1].split('_')[5][3:])
+    #tauV = int(modelfile.split('/')[-1].split('_')[3][4:])
     
-    hdulist = pf.HDUList(hdu)
-    hdulist.append(pf.ImageHDU(allwavelengths))
-    hdulist.append(pf.ImageHDU(allages))
+    hdulist = fits.HDUList(hdu)
+    hdulist.append(fits.ImageHDU(allwavelengths))
+    hdulist.append(fits.ImageHDU(allages))
     
     for i in range(totalages):
         ignore = read_current_filepos(fh, number=2)
@@ -83,9 +102,9 @@ def read_ised(modelfile, del_modelfile):
         no = read_current_filepos(fh)
         ignore = read_current_filepos(fh, type='f', number=no)
     
-        hdulist.append(pf.ImageHDU(seds[i]))
+        hdulist.append(fits.ImageHDU(seds[i]))
     
-    hdulist.writeto(modelfile.replace('.ised','.fits'), clobber=True)
+    hdulist.writeto(modelfile.replace('.ised','.fits'), overwrite=True)
     print "Writing ...", modelfile.replace('.ised','.fits')
     
     if del_modelfile:
@@ -94,18 +113,20 @@ def read_ised(modelfile, del_modelfile):
 
     fh.close()
 
+    return None
+
 if __name__ == '__main__':
-    """
+
     # for SSPs
-    for file in glob.glob('/Users/baj/Documents/GALAXEV_BC03/bc03/models/Padova1994/salpeter/' + '*.ised'):
+    for file in glob.glob(src + '*.ised'):
         read_ised(file)
-    """
+
     # for CSPs
-    cspout = '/Users/baj/Documents/GALAXEV_BC03/bc03/src/cspout_new/'
-    metals = ["m22", "m32","m42","m52","m62","m72"]
+    metals = ["m62"]  # ["m22", "m32","m42","m52","m62","m72"]
     
     for metallicity in metals:
         metalsfolder = metallicity + '/'
-        dir = cspout + metalsfolder
-        for file in glob.glob(dir + '*csp*.ised'):
+        for file in glob.glob(cspout + metalsfolder + '*csp*.ised'):
             read_ised(file)
+
+    sys.exit(0)
