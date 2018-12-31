@@ -118,7 +118,8 @@ def read_ised(modelfile, del_modelfile=False):
 if __name__ == '__main__':
 
     # for SSPs
-    for file in glob.glob(src + '*.ised'):
+    ssp_dir = home + "/Documents/galaxev_bc03_2016update/bc03/Miles_Atlas/Salpeter_IMF/"
+    for file in glob.glob(ssp_dir + '*.ised'):
         read_ised(file)
 
     # for CSPs

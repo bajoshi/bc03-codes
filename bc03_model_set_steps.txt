@@ -6,6 +6,9 @@ Read in the notes in bc03_notes.txt
 1. Use the code bc03_extractspectra.py in GitHub repo bc03-codes
 to convert the ised files to fits files. This isn't strictly 
 necessary but I find fits files far more convenient to work with.
+And also the remaining codes are written to work with fits files.
 
 2. Use the function get_model_set() in massive-galaxies/codes/new_refine_grismz_iter.py
 to generate the set of models to use with SED fitting.
+
+2a. Make sure the *.*color files have been unzipped for the SSPs and the CSPs.
