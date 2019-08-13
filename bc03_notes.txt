@@ -44,6 +44,30 @@ You will have to source .bc_cshrc everytime this happens.
 .bc_cshrc lives in the src/ folder.
 
 --------------------------------------------------------------------------
+To run the code to generate the model set.
+This is to generate the set of models (.ised files)
+based on a chosen grid of parameters.
+
+1. You will need to run the code run_grid.py. 
+This code lives in the src/ folder.
+
+1a. Open the code in an editor and check the __main__ function
+to see that all parameters are set correctly.
+1b. Check that the output and input directories are also set correctly.
+
+2. Run the code, i.e., 
+bash$ >> cd_to_src_folder
+bash$ >> csh
+csh$ >> source .bc_cshrc
+csh$ >> python run_grid.py
+
+This code will take some time to run.
+
+3. After this code finishes running, you will have to run 
+get_model_set() in massive-galaxies/codes/new_refine_grismz_iter.py
+to gather and save all the generated models into a .npy or .fits file.
+
+--------------------------------------------------------------------------
 --------------------------------------------------------------------------
 NOTES FOR THE OLDER 2003 VERSION
 --------------------------------------------------------------------------
