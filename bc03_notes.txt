@@ -61,7 +61,7 @@ bash$ >> csh
 csh$ >> source .bc_cshrc
 csh$ >> python run_grid.py
 
-This code will take some time to run.
+This code will take some time to run. Many hours (~10) on the under-powered laptop.
 
 3. After this code finishes running, you will have to run 
 get_model_set() in massive-galaxies/codes/new_refine_grismz_iter.py

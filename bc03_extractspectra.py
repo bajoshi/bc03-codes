@@ -17,17 +17,6 @@ import sys
 
 home = os.getenv('HOME')
 
-src = home + "/Documents/galaxev_bc03_2016update/bc03/src/"
-cspout = "/Volumes/Bhavins_backup/bc03_models_npy_spectra/cspout_2016updated_galaxev/"
-# This is if working on the laptop. 
-# Then you must be using the external hard drive where the models are saved.
-if not os.path.isdir(cspout):
-    # On firstlight
-    cspout = home + '/Documents/galaxev_bc03_2016update/bc03/src/cspout_2016updated_galaxev/'
-    if not os.path.isdir(cspout):
-        print "Model directory not found. Exiting..."
-        sys.exit(0)
-
 def read_current_filepos(filehandle, type='i', number=1):
     """
         This function reads the given number of binary data which is of the supplied type
@@ -68,15 +57,32 @@ def read_ised(modelfile, del_modelfile=False):
     
     allages = read_current_filepos(fh, type='f', number=totalages) # in years
     
-    fh.seek(328, 1)
-    """
-    Done by trial and error and looking at the ezgal code but mostly the ezgal code helped/
-    This goes 328 bytes forward from the current position.
-    If the second keyword is not provided then it assumes absolute positioning.
-    I think (although I couldn't see all the characters properly) that these 328 
-    bytes simply contain their copyright string (or something like that).
-    Couldn't quite tell properly because they won't show up properly (some unicode issue).
-    """
+    # Going past some junk now
+    if 'salp' in modelfile:
+        fh.seek(328, 1)
+        """
+        Done by trial and error and looking at the ezgal code but mostly the ezgal code helped/
+        This goes 328 bytes forward from the current position.
+        If the second keyword is not provided then it assumes absolute positioning.
+        I think (although I couldn't see all the characters properly) that these 328 
+        bytes simply contain their copyright string (or something like that).
+        Couldn't quite tell properly because they won't show up properly (some unicode issue).
+        """
+    elif 'chab' in modelfile:
+        # This is exactly the same as 
+        # the code in the EZGAL package.
+        junk = read_current_filepos(fh, number=2)
+        iseg = read_current_filepos(fh, number=1)
+        if iseg > 0: 
+           junk = read_current_filepos(fh, type='f', number=6*iseg)
+        junk = read_current_filepos(fh, type='f', number=3)
+        junk = read_current_filepos(fh)
+        junk = read_current_filepos(fh, type='f')
+        junk = read_current_filepos(fh, type='c', number=80)
+        junk = read_current_filepos(fh, type='f', number=4)
+        junk = read_current_filepos(fh, type='c', number=160)
+        junk = read_current_filepos(fh)
+        junk = read_current_filepos(fh, number=3)
 
     totalwavelengths = read_current_filepos(fh)[0]
     allwavelengths = read_current_filepos(fh, type='f', number=totalwavelengths)
@@ -84,10 +90,6 @@ def read_ised(modelfile, del_modelfile=False):
     seds = np.zeros((totalages, totalwavelengths))
     
     hdu = fits.PrimaryHDU()
-    
-    # These two parameters aren't used for now
-    #tau = int(modelfile.split('/')[-1].split('_')[5][3:])
-    #tauV = int(modelfile.split('/')[-1].split('_')[3][4:])
     
     hdulist = fits.HDUList(hdu)
     hdulist.append(fits.ImageHDU(allwavelengths))
@@ -117,10 +119,39 @@ def read_ised(modelfile, del_modelfile=False):
 
 if __name__ == '__main__':
 
+    chosen_imf = 'Chabrier'
+
+    print "Beginning conversion of .ised files to .fits files."
+    print "Chosen IMF:", chosen_imf
+
+    # Select directory based on IMF
+    # Directory for SSPs
+    if chosen_imf == 'Salpeter':
+        ssp_dir = home + "/Documents/galaxev_bc03_2016update/bc03/Miles_Atlas/Salpeter_IMF/"
+        cspout_str = '' 
+    elif chosen_imf == 'Chabrier':
+        ssp_dir = home + "/Documents/galaxev_bc03_2016update/bc03/Miles_Atlas/Chabrier_IMF/"
+        cspout_str = 'chabrier'
+
+    #  Directory for CSPs
+    cspout = "/Volumes/Bhavins_backup/bc03_models_npy_spectra/cspout_" + cspout_str + "_2016updated_galaxev/"
+    # This is if working on the laptop. 
+    # Then you must be using the external hard drive where the models are saved.
+    if not os.path.isdir(cspout):
+        # On firstlight
+        cspout = home + "/Documents/galaxev_bc03_2016update/bc03/src/cspout_" + cspout_str + "_2016updated_galaxev/"
+        if not os.path.isdir(cspout):
+            print "Model directory not found. Exiting..."
+            sys.exit(0)
+
+    print "\n", "Directory for SSPs for .ised files:", ssp_dir
+    print "Directory for CSPs for .ised files:", cspout, "\n"
+
     # for SSPs
-    ssp_dir = home + "/Documents/galaxev_bc03_2016update/bc03/Miles_Atlas/Salpeter_IMF/"
     for file in glob.glob(ssp_dir + '*.ised'):
         read_ised(file)
+
+    print "\n", "Finished with SSPs. Moving to CSPs.", "\n"
 
     # for CSPs
     metals = ["m62"]  # ["m22", "m32","m42","m52","m62","m72"]
