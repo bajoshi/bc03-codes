@@ -124,7 +124,7 @@ def read_ised(modelfile, del_modelfile=False):
 
 if __name__ == '__main__':
 
-    chosen_imf = 'Chabrier'
+    chosen_imf = 'Salpeter'
 
     print "Beginning conversion of .ised files to .fits files."
     print "Chosen IMF:", chosen_imf
@@ -136,15 +136,15 @@ if __name__ == '__main__':
         cspout_str = '' 
     elif chosen_imf == 'Chabrier':
         ssp_dir = home + "/Documents/galaxev_bc03_2016update/bc03/Miles_Atlas/Chabrier_IMF/"
-        cspout_str = 'chabrier'
+        cspout_str = '_chabrier'
 
     #  Directory for CSPs
-    cspout = "/Volumes/Bhavins_backup/bc03_models_npy_spectra/cspout_" + cspout_str + "_2016updated_galaxev/"
+    cspout = "/Volumes/Bhavins_backup/bc03_models_npy_spectra/cspout" + cspout_str + "_2016updated_galaxev/"
     # This is if working on the laptop. 
     # Then you must be using the external hard drive where the models are saved.
     if not os.path.isdir(cspout):
         # On firstlight
-        cspout = home + "/Documents/galaxev_bc03_2016update/bc03/src/cspout_" + cspout_str + "_2016updated_galaxev/"
+        cspout = home + "/Documents/galaxev_bc03_2016update/bc03/src/cspout" + cspout_str + "_2016updated_galaxev/"
         if not os.path.isdir(cspout):
             print "Model directory not found. Exiting..."
             sys.exit(0)
@@ -165,5 +165,7 @@ if __name__ == '__main__':
         metalsfolder = metallicity + '/'
         for file in glob.glob(cspout + metalsfolder + '*csp*.ised'):
             read_ised(file)
+
+    print "All done."
 
     sys.exit(0)
