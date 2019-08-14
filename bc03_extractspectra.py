@@ -30,6 +30,11 @@ def read_current_filepos(filehandle, type='i', number=1):
     return np.asarray(arr)
 
 def read_ised(modelfile, del_modelfile=False):
+
+    if os.path.isfile(modelfile.replace('.ised','.fits')):
+        print modelfile.replace('.ised','.fits')
+        print "Fits file already exists. Skipping."
+        return None
     
     fh = open(modelfile, 'rb')
     
