@@ -64,8 +64,13 @@ csh$ >> python run_grid.py
 This code will take some time to run. Many hours (~10) on the under-powered laptop.
 
 3. After this code finishes running, you will have to run 
-get_model_set() in massive-galaxies/codes/new_refine_grismz_iter.py
+get_model_set() and other functions to save required arrays
+in massive-galaxies/codes/new_refine_grismz_iter.py
 to gather and save all the generated models into a .npy or .fits file.
+>> cd_to_massive-galaxies_codes
+>> python new_refine_grismz_iter.py
+
+This will run
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
