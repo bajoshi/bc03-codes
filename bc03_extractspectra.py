@@ -124,7 +124,7 @@ def read_ised(modelfile, del_modelfile=False):
 
 if __name__ == '__main__':
 
-    chosen_imf = 'Salpeter'
+    chosen_imf = 'Chabrier'
 
     print "Beginning conversion of .ised files to .fits files."
     print "Chosen IMF:", chosen_imf
