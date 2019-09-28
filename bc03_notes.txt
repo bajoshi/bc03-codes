@@ -87,6 +87,9 @@ tau_v ranges) into a single large fits file.
 (ii) add_emission_lines_and_save(figs_data_dir, chosen_imf)
 This code will add emission lines to the models. Make sure that you've told the 
 function about all the emission lines you want to add and that none are missing.
+If you are using a larger redshift range for fitting then make sure that you 
+include all possible lines that could be observed either in the photometry and 
+especially in the grism spectra.
 
 This code will write the models with emission lines to a new .npy file. It will
 also save the models without emission lines to a .npy file.
