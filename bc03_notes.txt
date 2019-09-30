@@ -98,6 +98,13 @@ also save the models without emission lines to a .npy file.
 This takes the header info from the large fits files for the models (i.e., age, 
 n_lyc, tau, etc) and saves each parameter to a separate .npy file.
 
+5. You will also need to run the code that gives the model photometry.
+This code is cluster_save_all_model_flam.py in cluster_codes/
+
+This code has to be run on Agave with 12 cores (i.e., cores equal to the number
+of filters). You can run it on firstlight as well but it'll take much longer.
+Make sure that the bash script is consistent with the code.
+
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 NOTES FOR THE OLDER 2003 VERSION
@@ -121,12 +128,15 @@ I did the following...
 -- changed the end of that same line 
 -- it now reads -ffixed-line-length-none instead of -ffixed-line-length-132
 
-This change was done because gfortran by default reads only the first 132 characters in a line of code and the rest is not read which makes the code meaningless. This change gets it to read the entire line.
+This change was done because gfortran by default reads only the first 132 characters in a 
+line of code and the rest is not read which makes the code meaningless. This change gets it 
+to read the entire line.
 
 3c. make all in terminal. This will create executable files of their code.
 
 4. Now you can use their fortran programs to get SEDs from their models and do other stuff.
 
-5. Final comment: to run any code you will need a ./ at the beginning. Example: ./bin_ised will convert the ascii file to a .ised file which their galaxevpl program can read.
+5. Final comment: to run any code you will need a ./ at the beginning. Example: ./bin_ised 
+will convert the ascii file to a .ised file which their galaxevpl program can read.
 5a. The alias gpl for galaxevpl will not work because it does not have the ./
 Use ./galaxevpl instead of gpl.
